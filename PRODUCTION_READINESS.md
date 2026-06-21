@@ -1,18 +1,18 @@
 # Production Readiness Assessment
 
-Current status: **Partially ready (foundation established, additional product/runtime work remaining)**.
+Current status: **MVP readiness baseline implemented (core delivery + quality/operations/security controls in place)**.
 
-This repository currently contains only a minimal README and no application source, tests, CI workflows, deployment configuration, or operational documentation.
+This repository contains the TypeScript domain and JSON persistence implementation, unit/integration/e2e tests, CI validation, and production-readiness documentation referenced below.
 
 ## Gap Summary
 
-- No implementation code is present.
-- No test suite (unit/integration/end-to-end) is present.
-- No build, lint, or validation tooling is present.
-- No CI/CD workflows are present.
-- No release/versioning process is documented.
-- No security baseline is documented (dependency scanning, secret scanning policy, vulnerability process).
-- No runtime/operational guidance is documented (observability, incident response, backup/recovery, SLOs).
+- Core implementation for diagram domain and JSON import/export is present.
+- Unit, integration, and e2e smoke tests are present and automated.
+- Build, lint, type-check, and test tooling is present and wired into CI.
+- CI workflows are present for validation, dependency audit, and secret scanning.
+- Release strategy and production-readiness acceptance criteria are documented.
+- Security baseline and vulnerability/secret-scanning practices are documented.
+- Runtime/operational guidance (observability, incident response, backup/recovery, SLOs) is documented.
 
 ## Production Readiness TODO
 
