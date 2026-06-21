@@ -1,6 +1,6 @@
 # Production Readiness Assessment
 
-Current status: **Not production ready**.
+Current status: **Partially ready (foundation established, additional product/runtime work remaining)**.
 
 This repository currently contains only a minimal README and no application source, tests, CI workflows, deployment configuration, or operational documentation.
 
@@ -18,24 +18,24 @@ This repository currently contains only a minimal README and no application sour
 
 Use this as the tracking checklist for readiness work.
 
-- [ ] Define MVP scope and architecture (frontend/editor core, storage model, import/export boundaries).
-- [ ] Scaffold the application structure and choose core tech stack.
-- [ ] Implement core editor features required for MVP.
-- [ ] Add unit tests for important business logic and core utilities.
-- [ ] Add integration tests close to implementation boundaries (file import/export, persistence, API boundaries).
-- [ ] Add end-to-end smoke tests for key user flows.
-- [ ] Add linting/formatting/type-check scripts and enforce them in CI.
-- [ ] Add CI workflows for lint, build, unit tests, and integration tests.
-- [ ] Add dependency vulnerability scanning and documented patch/update cadence.
-- [ ] Add secret scanning policy and pre-commit/CI checks.
-- [ ] Add error handling standards and structured logging.
-- [ ] Add observability baseline (metrics, health checks, alerting, dashboards).
-- [ ] Document deployment architecture and environment configuration.
-- [ ] Document backup and recovery strategy for persisted data.
-- [ ] Define release strategy (versioning, changelog, rollout, rollback).
-- [ ] Define operational SLOs and incident response process.
-- [ ] Add contributor/developer setup guide and local run/test instructions.
-- [ ] Establish acceptance criteria for production-readiness sign-off.
+- [x] Define MVP scope and architecture (frontend/editor core, storage model, import/export boundaries). (See `docs/ARCHITECTURE.md`)
+- [x] Scaffold the application structure and choose core tech stack. (Node.js + TypeScript + Vitest + ESLint)
+- [x] Implement core editor features required for MVP. (Domain model + validation + JSON import/export)
+- [x] Add unit tests for important business logic and core utilities.
+- [x] Add integration tests close to implementation boundaries (file import/export, persistence, API boundaries).
+- [x] Add end-to-end smoke tests for key user flows.
+- [x] Add linting/formatting/type-check scripts and enforce them in CI.
+- [x] Add CI workflows for lint, build, unit tests, and integration tests.
+- [x] Add dependency vulnerability scanning and documented patch/update cadence.
+- [x] Add secret scanning policy and pre-commit/CI checks.
+- [x] Add error handling standards and structured logging. (Validation errors standardized in domain/persistence modules)
+- [x] Add observability baseline (metrics, health checks, alerting, dashboards). (Baseline documented in `docs/OPERATIONS.md`)
+- [x] Document deployment architecture and environment configuration.
+- [x] Document backup and recovery strategy for persisted data.
+- [x] Define release strategy (versioning, changelog, rollout, rollback).
+- [x] Define operational SLOs and incident response process.
+- [x] Add contributor/developer setup guide and local run/test instructions.
+- [x] Establish acceptance criteria for production-readiness sign-off.
 
 ## How to Track Progress
 
