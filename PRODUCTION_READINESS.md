@@ -1,44 +1,44 @@
 # Production Readiness Assessment
 
-Current status: **MVP readiness baseline implemented (core delivery + quality/operations/security controls in place)**.
+Current status: **Not production ready** - an MCP-server-based editor core with CI quality gates, but with product and operational gaps still open.
 
-This repository contains the TypeScript domain and JSON persistence implementation, unit/integration/e2e tests, CI validation, and production-readiness documentation referenced below.
+## What exists today
 
-## Gap Summary
+- Diagram domain model (nodes/edges + validation) - `src/domain/diagram.ts`.
+- JSON import/export persistence boundary - `src/persistence/json.ts`.
+- MCP server over stdio (initialize / tools/list / tools/call / ping, JSON-RPC 2.0) with six editor tools - `src/mcp/`, `src/server/main.ts`.
+- Test suites: unit (domain), integration (persistence), MCP protocol conformance, tool contracts, untrusted-input security, and client-over-stdio e2e - `tests/`.
+- CI: lint, typecheck, build, coverage-gated tests, dependency audit (separate job), TruffleHog secret scanning (pinned) - `.github/workflows/ci.yml`.
+- LICENSE (ISC), CHANGELOG, documented release/security/operations baselines in `docs/`.
 
-- Core implementation for diagram domain and JSON import/export is present.
-- Unit, integration, and e2e smoke tests are present and automated.
-- Build, lint, type-check, and test tooling is present and wired into CI.
-- CI workflows are present for validation, dependency audit, and secret scanning.
-- Release strategy and production-readiness acceptance criteria are documented.
-- Security baseline and vulnerability/secret-scanning practices are documented.
-- Runtime/operational guidance (observability, incident response, backup/recovery, SLOs) is documented.
+## Gap Summary (tracked in issues)
+
+- Branch protection is not enforced on `main`; PRs have previously been merged with red CI - #18.
+- No draw.io (mxGraph XML) format support yet; only the JSON boundary exists - #21.
+- No release automation (tags, releases) yet; CHANGELOG added in this baseline - #24.
+- Pre-commit hooks not yet added; coverage thresholds are a baseline 70% - #25.
+- No hosted runtime: metrics, alerting, and dashboards remain future work (see `docs/OPERATIONS.md`).
 
 ## Production Readiness TODO
 
-Use this as the tracking checklist for readiness work.
-
-- [x] Define MVP scope and architecture (frontend/editor core, storage model, import/export boundaries). (See `docs/ARCHITECTURE.md`)
-- [x] Scaffold the application structure and choose core tech stack. (Node.js + TypeScript + Vitest + ESLint)
-- [x] Implement core editor features required for MVP. (Domain model + validation + JSON import/export)
-- [x] Add unit tests for important business logic and core utilities.
-- [x] Add integration tests close to implementation boundaries (file import/export, persistence, API boundaries).
-- [x] Add end-to-end smoke tests for key user flows.
-- [x] Add linting/formatting/type-check scripts and enforce them in CI.
-- [x] Add CI workflows for lint, build, unit tests, and integration tests.
-- [x] Add dependency vulnerability scanning and documented patch/update cadence.
-- [x] Add secret scanning policy and pre-commit/CI checks.
-- [x] Add error handling standards and structured logging. (Validation errors standardized in domain/persistence modules)
-- [x] Add observability baseline (metrics, health checks, alerting, dashboards). (Baseline documented in `docs/OPERATIONS.md`)
-- [x] Document deployment architecture and environment configuration.
-- [x] Document backup and recovery strategy for persisted data.
-- [x] Define release strategy (versioning, changelog, rollout, rollback).
-- [x] Define operational SLOs and incident response process.
-- [x] Add contributor/developer setup guide and local run/test instructions.
-- [x] Establish acceptance criteria for production-readiness sign-off.
+- [x] Define MVP scope and architecture (MCP editor core) - `docs/ARCHITECTURE.md`.
+- [x] Core domain and JSON persistence implementation.
+- [x] MCP server implementation (stdio transport, JSON-RPC 2.0, six tools) - #26.
+- [x] Unit, integration, MCP protocol, tool-contract, security, and e2e tests - #27, #28, #29, #30.
+- [x] Lint/typecheck/build/coverage enforced in CI - #25 (pre-commit hooks still open).
+- [x] Dependency vulnerability scanning (audit job + weekly Dependabot) and secret scanning (TruffleHog, pinned) - #19.
+- [x] Error handling standard: tool errors as structured MCP `isError` results; protocol errors as JSON-RPC codes.
+- [x] Contributor guide incl. MCP Inspector manual test - `docs/CONTRIBUTING.md`.
+- [x] LICENSE (ISC) - #23.
+- [x] CHANGELOG and versioning policy - `docs/RELEASE.md` (automation still open - #24).
+- [x] Toolchain fixed: TypeScript ~6.0.3, compatible with typescript-eslint 8.x - #17.
+- [ ] Branch protection + CODEOWNERS - #18.
+- [ ] draw.io format compatibility - #21.
+- [ ] Release automation and first tagged release - #24.
+- [ ] Pre-commit hooks - #25.
+- [ ] Observability baseline when a hosted runtime exists.
 
 ## How to Track Progress
 
-- Move items from unchecked to checked as they are completed.
 - Keep this file updated in each related pull request.
 - Add links to PRs/issues beside completed items for auditability.

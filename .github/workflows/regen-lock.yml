@@ -1,0 +1,35 @@
+name: Regenerate lockfile
+
+on:
+  push:
+    branches: [fix/mcp-editor-readiness]
+
+permissions:
+  contents: write
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Regenerate lockfile
+        run: npm install --package-lock-only --no-audit --no-fund
+
+      - name: Commit updated lockfile
+        run: |
+          if git status --porcelain package-lock.json | grep -q .; then
+            git config user.name "ci-lockfile"
+            git config user.email "ci-lockfile@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "chore: regenerate package-lock.json"
+            git push
+          else
+            echo "Lockfile already up to date"
+          fi
