@@ -1,10 +1,10 @@
 # DiagramEditor
 
-A draw.io-compatible diagram editor exposed as an **MCP (Model Context Protocol) server**. MCP clients can create and edit node/edge diagrams through tool calls; diagrams import and export as JSON.
+A draw.io-compatible diagram editor exposed as an **MCP (Model Context Protocol) server**. MCP clients can create and edit node/edge diagrams through tool calls; diagrams import and export as JSON and as draw.io (mxGraphModel XML).
 
 ## Project Status
 
-Core domain, JSON persistence, an MCP server (stdio transport), and CI quality gates are in place. **Not yet production ready** - see [PRODUCTION_READINESS.md](./PRODUCTION_READINESS.md) for the tracked gap list.
+Core domain, JSON + draw.io XML persistence, an MCP server (stdio transport), and CI quality gates are in place. **Not yet production ready** - see [PRODUCTION_READINESS.md](./PRODUCTION_READINESS.md) for the tracked gap list.
 
 ## Quick Start
 
@@ -14,7 +14,7 @@ npm run build
 npm start
 ```
 
-`npm start` runs the MCP server on stdio. Connect with any MCP client:
+`npm install` also installs a pre-commit hook (secret scan + eslint on staged files). `npm start` runs the MCP server on stdio. Connect with any MCP client:
 
 ```json
 {
@@ -36,6 +36,18 @@ npm start
 | `import_json` | Import and validate a diagram from JSON text |
 
 Each connection holds one stateful editor session. Limits: 10,000 nodes/edges, 10,000-char strings, 1,000,000-char import payloads.
+
+## Library API
+
+Beyond the MCP tools, the domain and persistence layers are importable directly:
+
+```ts
+import { createDiagram, addNode, addEdge } from './src/domain/diagram.js';
+import { exportDiagramToJson, importDiagramFromJson } from './src/persistence/json.js';
+import { exportDiagramToDrawioXml, importDiagramFromDrawioXml } from './src/persistence/drawio.js';
+```
+
+draw.io XML support covers the vertex/edge subset with labels; geometry and styles are not preserved (see [Architecture](./docs/ARCHITECTURE.md)).
 
 ## Development
 

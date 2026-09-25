@@ -6,21 +6,32 @@ An MCP-server-based diagram editor: clients create and edit diagrams through MCP
 
 - Diagram domain model (nodes + edges) with validation.
 - JSON import/export boundary.
+- draw.io (mxGraphModel XML) import/export boundary (subset).
 - MCP server (stdio, JSON-RPC 2.0) exposing six tools.
 - Per-connection stateful editor session.
 
 ## Module Boundaries
 
 - `src/domain/*`: pure business logic and validation (no I/O).
-- `src/persistence/*`: JSON serialization/deserialization boundary.
+- `src/persistence/json.ts`: JSON serialization/deserialization boundary.
+- `src/persistence/drawio.ts`: draw.io (mxGraphModel XML) serialization/deserialization boundary.
 - `src/mcp/tools.ts`: tool definitions, input limits, and `EditorSession` (per-connection state).
 - `src/mcp/server.ts`: MCP protocol handling (initialize, tools/list, tools/call, ping) over JSON-RPC 2.0.
 - `src/server/main.ts`: stdio entrypoint (newline-delimited JSON-RPC).
 - `src/index.ts`: library API export surface.
 - `tests/unit/*`: domain behavior coverage.
-- `src/persistence/*.integration.test.ts`: persistence boundary coverage.
+- `src/persistence/*.integration.test.ts`: persistence boundary coverage (JSON and draw.io XML).
 - `tests/mcp/*`: protocol conformance, tool contract, and security coverage.
 - `tests/e2e/*`: client-over-stdio end-to-end coverage.
+
+## Formats
+
+- **JSON (versioned `DiagramDocument`)**: canonical internal format; complete fidelity.
+- **draw.io XML (mxGraphModel subset)**: vertices and edges with labels map to
+  nodes and edges. Geometry, styles, and other mxCell attributes are not
+  preserved. Structural cells (id "0" and "1") are ignored on import and
+  regenerated on export. The parser is strict: DOCTYPE, CDATA, unsupported
+  entities, unexpected elements, and stray text content are rejected.
 
 ## Protocol
 
@@ -43,4 +54,5 @@ An MCP-server-based diagram editor: clients create and edit diagrams through MCP
 
 ## Future Work
 
-- draw.io (mxGraph XML) import/export - #21.
+- Expose draw.io XML import/export as MCP tools.
+- Branch protection on `main` (#18).
