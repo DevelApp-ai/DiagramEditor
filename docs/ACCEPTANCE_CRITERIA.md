@@ -2,10 +2,11 @@
 
 A release is considered production-ready only if all items below are true:
 
-- [ ] CI is green (lint, typecheck, build, tests, audit, secret scan).
+- [ ] CI is green (lint, typecheck, build, coverage-gated tests, audit, secret scan).
 - [ ] Unit tests cover core domain logic changes.
 - [ ] Integration tests cover persistence/import-export changes.
-- [ ] E2E smoke test passes for critical user flow.
+- [ ] MCP protocol conformance and tool contract tests pass.
+- [ ] E2E suite (client over stdio) passes for the critical editor flow.
 - [ ] No high/critical dependency vulnerabilities are open.
 - [ ] No unresolved secret scanning findings.
 - [ ] Deployment, rollback, and incident process are documented and current.

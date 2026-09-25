@@ -1,37 +1,43 @@
 {
   "name": "diagrameditor",
-  "version": "1.0.0",
-  "description": "Draw.io compatible editor",
+  "version": "0.1.0",
+  "description": "Draw.io compatible diagram editor exposed as an MCP server",
+  "license": "ISC",
+  "author": "DevelApp",
+  "type": "module",
   "main": "dist/src/index.js",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "test": "vitest run",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.json",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run src/**/*.integration.test.ts",
     "test:e2e": "vitest run tests/e2e",
-    "ci": "npm run lint && npm run typecheck && npm run build && npm test"
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/server/main.js",
+    "ci": "npm run lint && npm run typecheck && npm run build && npm run test:coverage"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DevelApp-ai/DiagramEditor.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/DevelApp-ai/DiagramEditor/issues"
   },
   "homepage": "https://github.com/DevelApp-ai/DiagramEditor#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
-    "@typescript-eslint/parser": "^8.61.1",
+    "@typescript-eslint/parser": "^8.70.0",
+    "@vitest/coverage-v8": "^5.0.1",
     "eslint": "^10.10.0",
-    "typescript": "^7.0.2",
-    "typescript-eslint": "^8.61.1",
-    "vitest": "^5.0.0"
-  },
-  "type": "module"
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.1"
+  }
 }
