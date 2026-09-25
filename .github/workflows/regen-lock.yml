@@ -24,12 +24,20 @@ jobs:
 
       - name: Commit updated lockfile
         run: |
-          if git status --porcelain package-lock.json | grep -q .; then
-            git config user.name "ci-lockfile"
-            git config user.email "ci-lockfile@users.noreply.github.com"
-            git add package-lock.json
-            git commit -m "chore: regenerate package-lock.json"
-            git push
-          else
+          git config user.name "ci-lockfile"
+          git config user.email "ci-lockfile@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then
             echo "Lockfile already up to date"
+            exit 0
           fi
+          for i in 1 2 3; do
+            git commit -m "chore: regenerate package-lock.json"
+            git fetch origin
+            git rebase origin/fix/mcp-editor-readiness || { git rebase --abort; exit 1; }
+            if git push; then
+              exit 0
+            fi
+          done
+          echo "Could not push lockfile"
+          exit 1

@@ -49,6 +49,8 @@ jobs:
             npm run build
             npm run test:coverage
           } > ci-diagnostics.txt 2>&1 || true
+          git fetch origin
+          git rebase origin/fix/mcp-editor-readiness || { git rebase --abort; exit 0; }
           git add ci-diagnostics.txt
           git commit -m "chore: record CI diagnostics [skip ci]" || echo "nothing to commit"
           git push || true
