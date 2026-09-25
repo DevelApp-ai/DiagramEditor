@@ -7,7 +7,7 @@ import {
 } from '../domain/diagram.js';
 
 /**
- * Minimal draw.io (mxGraphModel) XML support.
+ * draw.io (mxGraphModel) XML support.
  *
  * Supported subset: vertices (nodes) and edges with labels, mapped onto the
  * core DiagramDocument model. Geometry, styles, and other mxCell attributes
@@ -62,37 +62,6 @@ function escapeXmlAttribute(value: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
-}
-
-function parseMxCells(input: string): MxCell[] {
-  if (input.replace(/<!--[\s\S]*?-->/g, '').includes('<!')) {
-    throw new DiagramValidationError(
-      'Unsupported XML construct (DOCTYPE, CDATA, or entity declaration)'
-    );
-  }
-
-  const stack: string[] = ['document'];
-  const cells: MxCell[] = [];
-  let sawModel = false;
-
-  TOKEN.lastIndex = 0;
-  let match: RegExpExecArray | null;
-  while ((match = TOKEN.exec(input)) !== null) {
-    const before = input.slice(0, match.index);
-    const lastTokenEnd = lastNonWhitespaceEnd(before, TOKEN.lastIndex === 0 ? 0 : -1);
-    void lastTokenEnd;
-    TOKEN.lastIndex = TOKEN.lastIndex; // no-op to satisfy lint
-    const _unused = 0;
-    void _unused;
-    match = match;
-    break;
-  }
-
-  return cells;
-}
-
-function lastNonWhitespaceEnd(_before: string, _from: number): number {
-  return 0;
 }
 
 export function importDiagramFromDrawioXml(input: string): DiagramDocument {
@@ -243,7 +212,9 @@ function parseCells(input: string): MxCell[] {
     throw new DiagramValidationError('Unexpected text content in draw.io XML');
   }
   if (stack.length !== 1 || stack[0] !== 'document') {
-    throw new DiagramValidationError('Unclosed element in draw.io XML: ' + stack[stack.length - 1]);
+    throw new DiagramValidationError(
+      'Unclosed element in draw.io XML: ' + stack[stack.length - 1]
+    );
   }
   if (!sawModel) {
     throw new DiagramValidationError('Not a draw.io diagram (missing mxGraphModel)');
