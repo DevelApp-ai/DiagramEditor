@@ -146,8 +146,9 @@ describe('draw.io xml persistence integration', () => {
 
   it('rejects input that is not a draw.io diagram', () => {
     expect(() => importDiagramFromDrawioXml('<root><mxCell id="0"/></root>')).toThrow(
-      /missing mxGraphModel/
+      /Unexpected element/
     );
+    expect(() => importDiagramFromDrawioXml('   ')).toThrow(/missing mxGraphModel/);
     expect(() => importDiagramFromDrawioXml('plain text')).toThrow(DiagramValidationError);
   });
 
