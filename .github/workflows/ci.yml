@@ -10,8 +10,6 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,9 +37,9 @@ jobs:
 
       - name: Publish diagnostics on failure
         if: failure() && github.ref == 'refs/heads/fix/mcp-editor-readiness'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git config user.name "ci-diagnostics"
-          git config user.email "ci-diagnostics@users.noreply.github.com"
           {
             echo "# CI diagnostics"
             npm run lint
@@ -49,11 +47,10 @@ jobs:
             npm run build
             npm run test:coverage
           } > ci-diagnostics.txt 2>&1 || true
-          git fetch origin
-          git rebase origin/fix/mcp-editor-readiness || { git rebase --abort; exit 0; }
-          git add ci-diagnostics.txt
-          git commit -m "chore: record CI diagnostics [skip ci]" || echo "nothing to commit"
-          git push || true
+          head -c 20000 ci-diagnostics.txt > ci-diagnostics-trimmed.txt
+          echo ""
+          echo "(output trimmed to 20000 chars)" >> ci-diagnostics-trimmed.txt
+          gh pr comment 32 --body-file ci-diagnostics-trimmed.txt
 
   audit:
     runs-on: ubuntu-latest

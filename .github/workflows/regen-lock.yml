@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   regen:
@@ -20,9 +21,18 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Regenerate lockfile
-        run: npm install --package-lock-only --no-audit --no-fund
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! npm install --package-lock-only --no-audit --no-fund > regen-diag.txt 2>&1; then
+            cat regen-diag.txt
+            { echo "# Lockfile regen failure"; cat regen-diag.txt; } | head -c 20000 | gh pr comment 32 --body-file - || true
+            exit 1
+          fi
 
       - name: Commit updated lockfile
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "ci-lockfile"
           git config user.email "ci-lockfile@users.noreply.github.com"
@@ -39,5 +49,5 @@ jobs:
               exit 0
             fi
           done
-          echo "Could not push lockfile"
+          { echo "# Could not push lockfile after retries"; } | gh pr comment 32 --body-file - || true
           exit 1
