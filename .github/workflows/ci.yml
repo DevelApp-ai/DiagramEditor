@@ -10,9 +10,6 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,23 +34,6 @@ jobs:
 
       - name: Test with coverage
         run: npm run test:coverage
-
-      - name: Publish diagnostics on failure
-        if: failure() && github.ref == 'refs/heads/fix/mcp-editor-readiness'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          {
-            echo "# CI diagnostics"
-            npm run lint
-            npm run typecheck
-            npm run build
-            npm run test:coverage
-          } > ci-diagnostics.txt 2>&1 || true
-          head -c 20000 ci-diagnostics.txt > ci-diagnostics-trimmed.txt
-          echo ""
-          echo "(output trimmed to 20000 chars)" >> ci-diagnostics-trimmed.txt
-          gh pr comment 32 --body-file ci-diagnostics-trimmed.txt
 
   audit:
     runs-on: ubuntu-latest
