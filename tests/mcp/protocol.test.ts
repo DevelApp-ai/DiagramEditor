@@ -132,7 +132,8 @@ describe('mcp protocol', () => {
 
   it('returns a structured tool error when arguments are omitted or incomplete', async () => {
     const server = createMcpServer();
-    const response = await server.handleMessage(request(13, 'tools/call', { name: 'add_node' }));
+    await server.handleMessage(request(13, 'tools/call', { name: 'create_diagram' }));
+    const response = await server.handleMessage(request(14, 'tools/call', { name: 'add_node' }));
     expect(response?.error).toBeUndefined();
     const result = response?.result as { isError: boolean; content: Array<{ text: string }> };
     expect(result.isError).toBe(true);
