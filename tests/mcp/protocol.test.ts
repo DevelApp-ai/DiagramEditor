@@ -115,14 +115,11 @@ describe('mcp protocol', () => {
     }
   });
 
-  it('returns -32602 for malformed tools/call params', async () => {
+  it('returns -32602 for structurally invalid tools/call params', async () => {
     const server = createMcpServer();
     expect(
       await server.handleMessage(request(9, 'tools/call', { arguments: {} }))
     ).toMatchObject({ id: 9, error: { code: INVALID_PARAMS } });
-    expect(
-      await server.handleMessage(request(10, 'tools/call', { name: 'add_node' }))
-    ).toMatchObject({ id: 10, error: { code: INVALID_PARAMS } });
     expect(
       await server.handleMessage(
         request(11, 'tools/call', { name: 'add_node', arguments: ['nope'] })
@@ -131,6 +128,15 @@ describe('mcp protocol', () => {
     expect(
       await server.handleMessage(request(12, 'tools/call', { name: 'not_a_tool' }))
     ).toMatchObject({ id: 12, error: { code: INVALID_PARAMS } });
+  });
+
+  it('returns a structured tool error when arguments are omitted or incomplete', async () => {
+    const server = createMcpServer();
+    const response = await server.handleMessage(request(13, 'tools/call', { name: 'add_node' }));
+    expect(response?.error).toBeUndefined();
+    const result = response?.result as { isError: boolean; content: Array<{ text: string }> };
+    expect(result.isError).toBe(true);
+    expect(result.content[0].text).toMatch(/Missing required argument/);
   });
 
   it('supports a stateful editor flow through tools/call', async () => {

@@ -21,8 +21,12 @@ class McpClientProcess {
 
   constructor() {
     this.child = spawn('node', [SERVER_PATH], { stdio: ['pipe', 'pipe', 'pipe'] });
-    const lines = createInterface({ input: this.child.stdout });
-    lines.on('line', (line) => {
+    const stdout = this.child.stdout;
+    if (stdout === null) {
+      throw new Error('Server process has no stdout');
+    }
+    const lines = createInterface({ input: stdout });
+    lines.on('line', (line: string) => {
       const trimmed = line.trim();
       if (trimmed.length === 0) {
         return;
@@ -52,18 +56,27 @@ class McpClientProcess {
         },
         reject
       });
-      this.child.stdin?.write(
-        JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n'
-      );
+      const stdin = this.child.stdin;
+      if (stdin === null) {
+        reject(new Error('Server process has no stdin'));
+        return;
+      }
+      stdin.write(JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n');
     });
   }
 
   notify(method: string): void {
-    this.child.stdin?.write(JSON.stringify({ jsonrpc: '2.0', method }) + '\n');
+    const stdin = this.child.stdin;
+    if (stdin !== null) {
+      stdin.write(JSON.stringify({ jsonrpc: '2.0', method }) + '\n');
+    }
   }
 
   sendRaw(payload: string): void {
-    this.child.stdin?.write(payload + '\n');
+    const stdin = this.child.stdin;
+    if (stdin !== null) {
+      stdin.write(payload + '\n');
+    }
   }
 
   kill(): void {
