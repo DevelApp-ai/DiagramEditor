@@ -1,0 +1,57 @@
+# CI diagnostics
+
+> diagrameditor@0.1.0 lint
+> eslint .
+
+sh: 1: eslint: not found
+
+> diagrameditor@0.1.0 typecheck
+> tsc --noEmit
+
+src/persistence/json.integration.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+src/server/main.ts(1,33): error TS2591: Cannot find name 'node:readline'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(15,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(37,43): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(38,22): error TS7006: Parameter 'line' implicitly has an 'any' type.
+src/server/main.ts(48,1): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(49,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(51,1): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(52,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(1,47): error TS2591: Cannot find name 'node:child_process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(2,28): error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(3,33): error TS2591: Cannot find name 'node:readline'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(4,59): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/e2e/mcp-e2e.test.ts(25,23): error TS7006: Parameter 'line' implicitly has an 'any' type.
+tests/mcp/protocol.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/mcp/security.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/mcp/tools.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/unit/diagram.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+vitest.config.ts(1,30): error TS2307: Cannot find module 'vitest/config' or its corresponding type declarations.
+
+> diagrameditor@0.1.0 build
+> tsc -p tsconfig.json
+
+src/persistence/json.integration.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+src/server/main.ts(1,33): error TS2591: Cannot find name 'node:readline'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(15,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(37,43): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(38,22): error TS7006: Parameter 'line' implicitly has an 'any' type.
+src/server/main.ts(48,1): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(49,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(51,1): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/server/main.ts(52,3): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(1,47): error TS2591: Cannot find name 'node:child_process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(2,28): error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(3,33): error TS2591: Cannot find name 'node:readline'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+tests/e2e/mcp-e2e.test.ts(4,59): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/e2e/mcp-e2e.test.ts(25,23): error TS7006: Parameter 'line' implicitly has an 'any' type.
+tests/mcp/protocol.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/mcp/security.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/mcp/tools.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+tests/unit/diagram.test.ts(1,38): error TS2307: Cannot find module 'vitest' or its corresponding type declarations.
+vitest.config.ts(1,30): error TS2307: Cannot find module 'vitest/config' or its corresponding type declarations.
+
+> diagrameditor@0.1.0 test:coverage
+> vitest run --coverage
+
+sh: 1: vitest: not found
