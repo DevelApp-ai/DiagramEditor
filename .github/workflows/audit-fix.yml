@@ -17,6 +17,8 @@ jobs:
           node-version-file: '.nvmrc'
           cache: npm
       - run: npm ci
+      - name: Install updated dependencies (regenerate lockfile)
+        run: npm install --no-audit
       - name: Audit before fix
         run: npm audit --audit-level=high --json > audit-before.json || true
       - name: Apply audit fix
@@ -33,10 +35,10 @@ jobs:
             const vulns = (j) => (j && j.vulnerabilities ? Object.values(j.vulnerabilities) : []);
             const lines = ["# Temporary audit report", ""];
             lines.push("## Before (" + vulns(before).length + " advisories)");
-            for (const v of vulns(before)) lines.push("- " + v.name + "@" + (v.range ?? "") + " severity=" + v.severity + " fixAvailable=" + JSON.stringify(v.fixAvailable).slice(0, 200) + " via=" + JSON.stringify(v.via).slice(0, 400));
+            for (const v of vulns(before)) lines.push("- " + v.name + " vulnerable-range=" + (v.range ?? "") + " severity=" + v.severity + " fixAvailable=" + JSON.stringify(v.fixAvailable).slice(0, 200) + " via=" + JSON.stringify(v.via).slice(0, 400));
             lines.push("");
             lines.push("## After (" + vulns(after).length + " advisories)");
-            for (const v of vulns(after)) lines.push("- " + v.name + "@" + (v.range ?? "") + " severity=" + v.severity + " fixAvailable=" + JSON.stringify(v.fixAvailable).slice(0, 200) + " via=" + JSON.stringify(v.via).slice(0, 400));
+            for (const v of vulns(after)) lines.push("- " + v.name + " vulnerable-range=" + (v.range ?? "") + " severity=" + v.severity + " fixAvailable=" + JSON.stringify(v.fixAvailable).slice(0, 200) + " via=" + JSON.stringify(v.via).slice(0, 400));
             fs.writeFileSync("AUDIT-REPORT.md", lines.join("\n") + "\n");
           '
       - name: Commit and push if changed
@@ -48,5 +50,5 @@ jobs:
             echo "No changes; stopping."
             exit 0
           fi
-          git commit -m "chore: apply npm audit fix and record audit report"
+          git commit -m "chore: install updated deps, record audit report"
           git push
