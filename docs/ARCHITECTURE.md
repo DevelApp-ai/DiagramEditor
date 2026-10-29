@@ -7,7 +7,7 @@ An MCP-server-based diagram editor: clients create and edit diagrams through MCP
 - Diagram domain model (nodes + edges) with validation.
 - JSON import/export boundary.
 - draw.io (mxGraphModel XML) import/export boundary (subset).
-- MCP server (stdio, JSON-RPC 2.0) exposing six tools.
+- MCP server (stdio, JSON-RPC 2.0) exposing eight tools.
 - Per-connection stateful editor session.
 
 ## Module Boundaries
@@ -42,7 +42,7 @@ An MCP-server-based diagram editor: clients create and edit diagrams through MCP
 
 ## Limits and Robustness
 
-- Maximum 10,000 nodes and 10,000 edges; strings capped at 10,000 characters; import payloads capped at 1,000,000 characters.
+- Maximum 10,000 nodes and 10,000 edges; strings capped at 10,000 characters; import payloads capped at 1,000,000 characters (JSON and draw.io XML).
 - Imported content is validated against the `DiagramDocument` schema before use; labels are inert data and are never interpreted.
 
 ## Technology Choices
@@ -54,5 +54,4 @@ An MCP-server-based diagram editor: clients create and edit diagrams through MCP
 
 ## Future Work
 
-- Expose draw.io XML import/export as MCP tools.
 - Branch protection on `main` (#18).
