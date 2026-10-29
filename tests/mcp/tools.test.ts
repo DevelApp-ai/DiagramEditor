@@ -4,6 +4,7 @@ import {
   MAX_JSON_PAYLOAD_LENGTH,
   MAX_NODES,
   MAX_TEXT_LENGTH,
+  MAX_XML_PAYLOAD_LENGTH,
   ToolCallResult,
   toolDefinitions
 } from '../../src/mcp/tools.js';
@@ -15,8 +16,8 @@ const textOf = (result: ToolCallResult): string => result.content[0].text;
 const isError = (result: ToolCallResult): boolean => result.isError === true;
 
 describe('mcp tool contracts', () => {
-  it('exposes six uniquely named tools with object schemas', () => {
-    expect(toolDefinitions).toHaveLength(6);
+  it('exposes eight uniquely named tools with object schemas', () => {
+    expect(toolDefinitions).toHaveLength(8);
     const names = toolDefinitions.map((tool) => tool.name);
     expect(new Set(names).size).toBe(names.length);
     for (const tool of toolDefinitions) {
@@ -78,6 +79,51 @@ describe('mcp tool contracts', () => {
     expect(isError(call(b, 'import_json', { json: exported }))).toBe(false);
     expect(textOf(call(b, 'export_json'))).toBe(exported);
     expect(isError(call(b, 'validate_diagram'))).toBe(false);
+  });
+
+  it('round-trips a diagram across sessions via draw.io XML', () => {
+    const a = session();
+    call(a, 'create_diagram');
+    call(a, 'add_node', { id: 'n1', label: 'A & <B>' });
+    call(a, 'add_node', { id: 'n2', label: 'B' });
+    call(a, 'add_edge', { id: 'e1', from: 'n1', to: 'n2', label: 'l' });
+    const xml = textOf(call(a, 'export_drawio'));
+    expect(xml).toContain('<mxGraphModel>');
+    expect(xml).toContain('value="A &amp; &lt;B&gt;"');
+
+    const b = session();
+    expect(isError(call(b, 'import_drawio', { xml }))).toBe(false);
+    expect(textOf(call(b, 'export_drawio'))).toBe(xml);
+    expect(isError(call(b, 'validate_diagram'))).toBe(false);
+  });
+
+  it('ignores structural mxCells when importing draw.io XML', () => {
+    const s = session();
+    const xml =
+      '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>' +
+      '<mxCell id="n1" value="A" vertex="1" parent="1">' +
+      '<mxGeometry as="geometry"/></mxCell></root></mxGraphModel>';
+    expect(isError(call(s, 'import_drawio', { xml }))).toBe(false);
+    const exported = JSON.parse(textOf(call(s, 'export_json')));
+    expect(exported.nodes).toHaveLength(1);
+    expect(exported.nodes[0]).toEqual({ id: 'n1', label: 'A' });
+  });
+
+  it('rejects malformed draw.io XML imports', () => {
+    const s = session();
+    expect(textOf(call(s, 'import_drawio', { xml: 'plain text' }))).toMatch(
+      /Unexpected text content in draw\.io XML/
+    );
+    const danglingEdge =
+      '<mxGraphModel><root><mxCell id="e1" edge="1" source="nope" target="n1"/>' +
+      '</root></mxGraphModel>';
+    expect(isError(call(s, 'import_drawio', { xml: danglingEdge }))).toBe(true);
+    expect(textOf(call(s, 'import_drawio', {}))).toMatch(
+      /Missing required argument: xml/
+    );
+    expect(
+      textOf(call(s, 'import_drawio', { xml: ' '.repeat(MAX_XML_PAYLOAD_LENGTH + 1) }))
+    ).toMatch(/maximum length/);
   });
 
   it('rejects malformed imports', () => {
