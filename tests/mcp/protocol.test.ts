@@ -99,7 +99,7 @@ describe('mcp protocol', () => {
     const result = response?.result as {
       tools: Array<{ name: string; description: string; inputSchema: { type: string } }>;
     };
-    expect(result.tools).toHaveLength(6);
+    expect(result.tools).toHaveLength(8);
     const names = result.tools.map((tool) => tool.name);
     expect(names).toEqual([
       'create_diagram',
@@ -107,7 +107,9 @@ describe('mcp protocol', () => {
       'add_edge',
       'validate_diagram',
       'export_json',
-      'import_json'
+      'import_json',
+      'export_drawio',
+      'import_drawio'
     ]);
     for (const tool of result.tools) {
       expect(tool.inputSchema.type).toBe('object');

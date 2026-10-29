@@ -7,6 +7,10 @@ project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- MCP tools `export_drawio` and `import_drawio`, exposing the draw.io
+  (mxGraphModel XML) persistence boundary over the MCP protocol. Same input
+  limits and structured error handling as the JSON tools; covered by protocol,
+  tool-contract, security, and end-to-end tests (#66).
 - draw.io (mxGraphModel XML) import/export: `importDiagramFromDrawioXml` /
   `exportDiagramToDrawioXml` in `src/persistence/drawio.ts`, with a strict,
   hand-rolled parser (no XML dependencies) and integration tests including

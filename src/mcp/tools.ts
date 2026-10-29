@@ -7,10 +7,15 @@ import {
   validateDiagram
 } from '../domain/diagram.js';
 import { exportDiagramToJson, importDiagramFromJson } from '../persistence/json.js';
+import {
+  exportDiagramToDrawioXml,
+  importDiagramFromDrawioXml
+} from '../persistence/drawio.js';
 
 export const MAX_NODES = 10_000;
 export const MAX_TEXT_LENGTH = 10_000;
 export const MAX_JSON_PAYLOAD_LENGTH = 1_000_000;
+export const MAX_XML_PAYLOAD_LENGTH = 1_000_000;
 
 export interface ToolDefinition {
   readonly name: string;
@@ -86,6 +91,23 @@ export const toolDefinitions: readonly ToolDefinition[] = [
       required: ['json'],
       additionalProperties: false
     }
+  },
+  {
+    name: 'export_drawio',
+    description:
+      'Export the current diagram as draw.io-compatible XML (mxGraphModel).',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false }
+  },
+  {
+    name: 'import_drawio',
+    description:
+      'Import a diagram from draw.io (mxGraphModel) XML text, replacing the current diagram.',
+    inputSchema: {
+      type: 'object',
+      properties: { xml: stringSchema('draw.io mxGraphModel XML text.') },
+      required: ['xml'],
+      additionalProperties: false
+    }
   }
 ];
 
@@ -113,6 +135,10 @@ export class EditorSession {
           return this.exportJson();
         case 'import_json':
           return this.importJson(args);
+        case 'export_drawio':
+          return this.exportDrawio();
+        case 'import_drawio':
+          return this.importDrawio(args);
         default:
           return fail('Unknown tool: ' + name);
       }
@@ -220,6 +246,36 @@ export class EditorSession {
       maxLength: MAX_JSON_PAYLOAD_LENGTH
     }) as string;
     const imported = importDiagramFromJson(json);
+    if (imported.nodes.length > MAX_NODES) {
+      throw new DiagramValidationError(
+        'Imported diagram exceeds node limit (' + MAX_NODES + ').'
+      );
+    }
+    if (imported.edges.length > MAX_NODES) {
+      throw new DiagramValidationError(
+        'Imported diagram exceeds edge limit (' + MAX_NODES + ').'
+      );
+    }
+    this.diagram = imported;
+    return ok(
+      'Imported diagram (' +
+        imported.nodes.length +
+        ' nodes, ' +
+        imported.edges.length +
+        ' edges).'
+    );
+  }
+
+  private exportDrawio(): ToolCallResult {
+    return ok(exportDiagramToDrawioXml(this.currentDiagram()));
+  }
+
+  private importDrawio(args: Record<string, unknown>): ToolCallResult {
+    const xml = this.readString(args, 'xml', {
+      required: true,
+      maxLength: MAX_XML_PAYLOAD_LENGTH
+    }) as string;
+    const imported = importDiagramFromDrawioXml(xml);
     if (imported.nodes.length > MAX_NODES) {
       throw new DiagramValidationError(
         'Imported diagram exceeds node limit (' + MAX_NODES + ').'

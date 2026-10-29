@@ -115,7 +115,9 @@ describe('mcp e2e: client over stdio', () => {
       'add_edge',
       'validate_diagram',
       'export_json',
-      'import_json'
+      'import_json',
+      'export_drawio',
+      'import_drawio'
     ]);
   });
 
@@ -140,6 +142,35 @@ describe('mcp e2e: client over stdio', () => {
     const content = (exported.result as {
       content: Array<{ type: string; text: string }>;
     }).content;
+    const diagram = JSON.parse(content[0].text) as {
+      nodes: Array<{ id: string }>;
+      edges: unknown[];
+    };
+    expect(diagram.nodes.map((node) => node.id)).toEqual(['n-start', 'n-end']);
+    expect(diagram.edges).toHaveLength(1);
+  });
+
+  it('round-trips draw.io XML through the server', async () => {
+    const xmlResponse = await client.request('tools/call', {
+      name: 'export_drawio',
+      arguments: {}
+    });
+    const xml = ((xmlResponse.result as { content: Array<{ text: string }> }).content)[0]
+      .text;
+    expect(xml).toContain('<mxGraphModel>');
+
+    await client.request('tools/call', { name: 'create_diagram', arguments: {} });
+    const imported = await client.request('tools/call', {
+      name: 'import_drawio',
+      arguments: { xml }
+    });
+    expect((imported.result as { isError?: boolean }).isError).toBeFalsy();
+
+    const exported = await client.request('tools/call', {
+      name: 'export_json',
+      arguments: {}
+    });
+    const content = (exported.result as { content: Array<{ text: string }> }).content;
     const diagram = JSON.parse(content[0].text) as {
       nodes: Array<{ id: string }>;
       edges: unknown[];

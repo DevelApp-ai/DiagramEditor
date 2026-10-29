@@ -34,8 +34,10 @@ npm start
 | `validate_diagram` | Validate id uniqueness and edge endpoint integrity |
 | `export_json` | Export the current diagram as JSON text |
 | `import_json` | Import and validate a diagram from JSON text |
+| `export_drawio` | Export the current diagram as draw.io (mxGraphModel) XML |
+| `import_drawio` | Import and validate a diagram from draw.io (mxGraphModel) XML |
 
-Each connection holds one stateful editor session. Limits: 10,000 nodes/edges, 10,000-char strings, 1,000,000-char import payloads.
+Each connection holds one stateful editor session. Limits: 10,000 nodes/edges, 10,000-char strings, 1,000,000-char import payloads (JSON and XML).
 
 ## Library API
 
