@@ -24,6 +24,13 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - Documentation updated to reflect the draw.io format subset and the release
   and pre-commit processes.
 
+### Fixed
+- CI audit job restored to green: bumped `vitest` and
+  `@vitest/coverage-v8` to `^5.0.5` and regenerated the lockfile, resolving
+  six npm audit advisories in the dev-dependency tree, including the high
+  severity `source-map-js` (GHSA-68fv-2mgg-jv7q) and `vite` advisories and
+  the `@vitest/mocker` manual-mock injection advisory (GHSA-qxg6-89mg-rqv8).
+
 ## 0.1.0 - 2026-09-25
 
 ### Added
