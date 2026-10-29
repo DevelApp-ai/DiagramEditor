@@ -16,8 +16,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
-      - run: npm ci
-      - name: Install updated dependencies (regenerate lockfile)
+      - name: Install dependencies and regenerate lockfile
         run: npm install --no-audit
       - name: Audit before fix
         run: npm audit --audit-level=high --json > audit-before.json || true
