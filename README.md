@@ -72,3 +72,7 @@ Manual inspection: `npx @modelcontextprotocol/inspector node dist/src/server/mai
 - [Production Sign-off Criteria](./docs/ACCEPTANCE_CRITERIA.md)
 - [Changelog](./CHANGELOG.md)
 - [Production Readiness Assessment](./PRODUCTION_READINESS.md)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
