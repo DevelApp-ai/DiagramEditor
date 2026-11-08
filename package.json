@@ -2,8 +2,8 @@
   "name": "diagrameditor",
   "version": "0.1.0",
   "description": "Draw.io compatible diagram editor exposed as an MCP server",
-  "license": "ISC",
-  "author": "DevelApp",
+  "license": "MIT",
+  "author": "DevelApp.ai ApS",
   "type": "module",
   "main": "dist/src/index.js",
   "engines": {
