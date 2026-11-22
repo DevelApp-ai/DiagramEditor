@@ -30,12 +30,12 @@ npm start
 |---|---|
 | `create_diagram` | Create a new empty diagram, replacing the current one |
 | `add_node` | Add a node (unique, non-empty `id`; `label`) |
-| `add_edge` | Add an edge between two existing nodes (optional `label`) |
+| `add_edge` | Add an edge between two nodes (optional `label`) |
 | `validate_diagram` | Validate id uniqueness and edge endpoint integrity |
-| `export_json` | Export the current diagram as JSON text |
-| `import_json` | Import and validate a diagram from JSON text |
-| `export_drawio` | Export the current diagram as draw.io (mxGraphModel) XML |
-| `import_drawio` | Import and validate a diagram from draw.io (mxGraphModel) XML |
+| `export_json` | Export the diagram as JSON |
+| `import_json` | Import and validate a diagram from JSON |
+| `export_drawio` | Export the diagram as draw.io XML |
+| `import_drawio` | Import and validate a diagram from draw.io XML |
 
 Each connection holds one stateful editor session. Limits: 10,000 nodes/edges, 10,000-char strings, 1,000,000-char import payloads (JSON and XML).
 
@@ -76,3 +76,4 @@ Manual inspection: `npx @modelcontextprotocol/inspector node dist/src/server/mai
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
