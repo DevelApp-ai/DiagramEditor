@@ -76,4 +76,3 @@ Manual inspection: `npx @modelcontextprotocol/inspector node dist/src/server/mai
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
